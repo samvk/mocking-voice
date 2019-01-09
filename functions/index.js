@@ -1,5 +1,6 @@
 const { dialogflow, SimpleResponse } = require('actions-on-google');
 const functions = require('firebase-functions');
+const profanityFilter = require('profanity-filter');
 
 const app = dialogflow({ debug: true });
 
@@ -40,8 +41,8 @@ app.intent(['Default Fallback Intent', 'mock'], (conv, { phrase }) => {
 </speak>`;
 
     conv.close(new SimpleResponse({
-        speech: speechResponse,
-        text: textResponse,
+        speech: profanityFilter(speechResponse, (word) => `<say-as interpret-as="expletive">${word}</say-as>`),
+        text: profanityFilter(textResponse, (word) => word.replace(/./g, '*')),
     }));
 });
 
