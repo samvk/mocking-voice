@@ -9,7 +9,7 @@ app.intent(['Default Fallback Intent', 'mock'], (conv, { phrase }) => {
     const toggleCase = (() => {
         let makeUpperCase = false;
         // const isLetter = (char) => (/\p{L}/u).test(char);
-        const isLetter = (char) => (/[a-z]/i).test(char);
+        const isLetter = (char) => (/[a-zÀ-ÖØ-öø-ÿ]/i).test(char);
 
         return (char) => {
             if (isLetter(char)) {
