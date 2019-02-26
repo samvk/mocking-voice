@@ -3,6 +3,16 @@ const functions = require('firebase-functions');
 
 const app = dialogflow({ debug: true });
 
+const escapeXml = (str) => (
+    str.replace(/[<>&'"]/g, (char) => ({
+        '<': '&lt;',
+        '>': '&gt;',
+        '&': '&amp;',
+        "'": '&apos;',
+        '"': '&quot;',
+    }[char]))
+);
+
 app.intent(['Default Fallback Intent', 'mock'], (conv, { phrase }) => {
     phrase = phrase || conv.query;
 
@@ -29,7 +39,7 @@ app.intent(['Default Fallback Intent', 'mock'], (conv, { phrase }) => {
         </media>
         <media xml:id="phrase">
             <prosody rate="fast">
-                ${phrase.split(' ').map((word, i) => ((i % 2) === 0 ? (
+                ${escapeXml(phrase).split(' ').map((word, i) => ((i % 2) === 0 ? (
         `<prosody pitch="+14%">${word}</prosody>`
     ) : (
         `<prosody pitch="-6%"><emphasis level="reduced">${word}</emphasis></prosody>`
